@@ -34,21 +34,22 @@ class Todo extends Equatable {
           description: 'Free day',
         ),
       ];
-
+  static get initialTodo =>
+      const Todo(id: 1, completed: false, task: '', description: '');
   final int id;
   final bool completed;
   final String task;
   final String description;
-
+//que es esto
   @override
   List<Object> get props => [id, completed, task, description];
-
-  Todo copyWith({bool? completed}) {
+  //y esto
+  Todo copyWith({int ? id, String? task, String? description, bool? completed}) {
     return Todo(
-      id: id,
-      completed: completed ?? this.completed,
-      task: task,
-      description: description,
+      id: id ?? this.id,
+      completed: completed?? this.completed,
+      task: task?? this.task,
+      description: description?? this.description,
     );
   }
 }

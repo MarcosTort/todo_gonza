@@ -4,7 +4,7 @@ part of 'todos_bloc.dart';
 abstract class TodosEvent extends ReplayEvent {
   const TodosEvent();
 }
-//evento para el completed checkbox
+
 class TodoCompletedToggled extends TodosEvent {
   const TodoCompletedToggled({required this.completed, required this.todo});
 
@@ -16,5 +16,10 @@ class TodoPriorityUpdated extends TodosEvent {
   const TodoPriorityUpdated({required this.position, required this.todo});
 
   final int position;
+  final Todo todo;
+}
+
+class AddTodo extends TodosEvent {
+  const AddTodo({required this.todo});
   final Todo todo;
 }
