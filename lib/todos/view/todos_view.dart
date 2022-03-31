@@ -17,79 +17,28 @@ class TodosPage extends StatelessWidget {
           create: (context) => TodosBloc(),
         ),
       ],
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Todos App'),
-              // actions: const [_UndoButton(), _RedoButton()],
-            ),
-            body: const _TodosList(),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                //     => showDialog<String>(
-          //   context: context,
-          //   builder: (BuildContext context) => AlertDialog(
-          //     title: const Text('AlertDialog Title'),
-          //     content: const Text('AlertDialog description'),
-          //     actions: <Widget>[
-          //       TextButton(
-          //         onPressed: () => Navigator.pop(context, 'Cancel'),
-          //         child: const Text('Cancel'),
-          //       ),
-          //       TextButton(
-          //         onPressed: () => Navigator.pop(context, 'OK'),
-          //         child: const Text('OK'),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-                Navigator.push(
-                  context,
-                  CreateTodoView.route(context.read<TodosBloc>()),
-                );
-              },
-            ),
-          );
-        }
-      ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.teal[100],
+            title: const Text('Todos App'),
+          ),
+          body: const _TodosList(),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.teal[200],
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                CreateTodoView.route(context.read<TodosBloc>()),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }
-
-// class _UndoButton extends StatelessWidget {
-//   const _UndoButton({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return IconButton(
-//       onPressed: () {
-//         // if (context.read<TodosBloc>().canUndo) {
-//         //   context.read<TodosBloc>().undo();
-//         // }
-//       },
-//       icon: const Icon(Icons.undo),
-//       tooltip: 'Undo',
-//     );
-//   }
-// }
-
-// class _RedoButton extends StatelessWidget {
-//   const _RedoButton({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return IconButton(
-//       onPressed: () {
-//         // if (context.read<TodosBloc>().canRedo) {
-//         //   context.read<TodosBloc>().redo();
-//         // }
-//       },
-//       icon: const Icon(Icons.redo),
-//       tooltip: 'Redo',
-//     );
-//   }
-// }
 
 class _TodosList extends StatelessWidget {
   const _TodosList({Key? key}) : super(key: key);
@@ -102,6 +51,7 @@ class _TodosList extends StatelessWidget {
       padding: const EdgeInsets.all(14.0),
       //esto sería donde se arma la lista con todos los elementos, no?
       child: ReorderableListView.builder(
+        scrollDirection: Axis.vertical,
         itemCount: todos.length,
         onReorder: (oldIndex, newIndex) {
           if (oldIndex < newIndex) newIndex -= 1;
@@ -139,6 +89,14 @@ class _TodoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
+      
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      tileColor: Colors.amber[50],
+      activeColor: Colors.lightGreen[100],
+      selectedTileColor: Colors.tealAccent[100],
+      contentPadding: EdgeInsets.only(right: 30),
       // key: ValueKey(todo.id),
       value: todo.completed,
       onChanged: (value) {

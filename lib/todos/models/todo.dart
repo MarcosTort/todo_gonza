@@ -14,25 +14,8 @@ class Todo extends Equatable {
           completed: false,
           task: 'Clean the House',
           description: 'Clean the bedroom and the kitchen',
-        ),
-        const Todo(
-          id: 1,
-          completed: false,
-          task: 'Wash the Dishes',
-          description: 'Wash just the first 4 dishes',
-        ),
-        const Todo(
-          id: 2,
-          completed: false,
-          task: 'Go to the Gym',
-          description: 'Today is running day',
-        ),
-        const Todo(
-          id: 3,
-          completed: false,
-          task: 'Go to the Cinema',
-          description: 'Free day',
-        ),
+        
+        )
       ];
   static get initialTodo =>
       const Todo(id: 1, completed: false, task: '', description: '');

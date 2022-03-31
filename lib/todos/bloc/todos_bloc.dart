@@ -11,7 +11,6 @@ part 'todos_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc()
-      //preguntar a gian que es el super
       : super(TodosState(
           status: TodosStatus.initial,
           todos: Todo.initialList,
@@ -45,9 +44,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Future<void> _mapAddTodo(AddTodo event, Emitter<TodosState> emit) async {
-    final newTodo = event.todo;
     final updatedTodos = List<Todo>.from(state.todos);
+    final newTodo = event.todo.copyWith(id: updatedTodos.length + 1);
     updatedTodos.add(newTodo);
-    emit(state.copyWith(todos: updatedTodos));
+    emit(state.copyWith(todos: updatedTodos, status: TodosStatus.loading));
   }
 }

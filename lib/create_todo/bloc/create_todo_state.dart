@@ -5,6 +5,7 @@ enum CreateTodoStatus {
   loading,
   loaded,
   error,
+  submitted,
 }
 
 class CreateTodoState extends Equatable {
