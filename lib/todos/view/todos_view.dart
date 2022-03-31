@@ -49,7 +49,6 @@ class _TodosList extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(14.0),
-      //esto sería donde se arma la lista con todos los elementos, no?
       child: ReorderableListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: todos.length,
@@ -75,7 +74,6 @@ class _TodosList extends StatelessWidget {
   }
 }
 
-//esto es cada list tile individual?
 class _TodoListTile extends StatelessWidget {
   const _TodoListTile({
     Key? key,

@@ -60,7 +60,8 @@ class CreateTodoView extends StatelessWidget {
                     ),
                     color: Colors.teal[50],
                     elevation: 25,
-                    margin: const EdgeInsets.symmetric(vertical: 100, horizontal: 70),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 100, horizontal: 70),
                     child: Column(
                       children: const [
                         _CreateTodoTitle(),
@@ -80,6 +81,7 @@ class CreateTodoView extends StatelessWidget {
                   ),
                   if (state.status == CreateTodoStatus.loading) ...[
                     const _WaitDataSubmittion(),
+                    
                   ],
                 ],
               ),
@@ -166,21 +168,32 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      focusColor: Colors.black54,
-      child: const Icon(
-        Icons.check_box_outlined,
-        color: Colors.white70,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      color: Colors.black54,
-      onPressed: () {
-        context.read<CreateTodoBloc>().add(const TodoNewSubmit(submit: true));
-        context
-            .read<TodosBloc>()
-            .add(AddTodo(todo: context.read<CreateTodoBloc>().state.todo));
+    //select hace que escuche siempre los cambios de status en este caso
+    final status = context.select((CreateTodoBloc bloc) => bloc.state.status);
+    final isLoading = status == CreateTodoStatus.loading;
+    return BlocBuilder<CreateTodoBloc, CreateTodoState>(
+      buildWhen:(previous, current) => current.status == CreateTodoStatus.loading,
+      builder: (context, state) {
+        return MaterialButton(
+          focusColor: Colors.black54,
+          child: const Icon(
+            Icons.check_box_outlined,
+            color: Colors.white70,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.black54,
+          onPressed: () {
+            if ( state.status == CreateTodoStatus.loading) {
+              null;
+            } else {
+              context.read<CreateTodoBloc>().add(const TodoNewSubmit(submit: true));
+              context.read<TodosBloc>()
+                  .add(AddTodo(todo: context.read<CreateTodoBloc>().state.todo));
+            }
+          },
+        );
       },
     );
   }
