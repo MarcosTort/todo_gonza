@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project/create_todo/create_todo.dart';
 import 'package:project/todos/bloc/todos_bloc.dart';
 import 'package:project/todos/models/todo.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodosPage extends StatelessWidget {
   const TodosPage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class TodosPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                CreateTodoView.route(context.read<TodosBloc>()),
+                CreateTodoView.route(context),
               );
             },
           ),
@@ -86,33 +87,91 @@ class _TodoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+    return Slidable(
+      startActionPane: ActionPane(
+        // A motion is a widget used to control how the pane animates.
+        motion: const ScrollMotion(),
+
+        // A pane can dismiss the Slidable.
+        dismissible: DismissiblePane(onDismissed: () {}),
+
+        // All actions are defined in the children parameter.
+        children: const [
+          // A SlidableAction can have an icon and/or a label.
+        ],
       ),
-      tileColor: Colors.amber[50],
-      activeColor: Colors.lightGreen[100],
-      selectedTileColor: Colors.tealAccent[100],
-      contentPadding: EdgeInsets.only(right: 30),
-      // key: ValueKey(todo.id),
-      value: todo.completed,
-      onChanged: (value) {
-        context
-            .read<TodosBloc>()
-            .add(TodoCompletedToggled(completed: value ?? false, todo: todo));
-      },
-      secondary: Container(
-        alignment: Alignment.center,
-        height: 40.0,
-        width: 20.0,
-        child: Text(
-          position.toString(),
-          style: const TextStyle(fontSize: 18.0),
+
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (_) => showDialog(
+              context: context,
+              builder: (BuildContext _) => AlertDialog(
+                content: Text('Delete this task?'),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: Text('Cancel'),
+                    onPressed: () {},
+                  ),
+                  SizedBox(
+                    width: 65,
+                  ),
+                  MaterialButton(
+                    child: Text('Delete'),
+                    onPressed: () {
+                      context.read<TodosBloc>().add(RemoveTodo(id: todo.id));
+                      
+                    },
+                  )
+                ],
+              ),
+            ),
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: CheckboxListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
+        //tileColor: Colors.amber[100],
+        activeColor: Colors.lightGreen[400],
+        selectedTileColor: Colors.tealAccent[100],
+        contentPadding: EdgeInsets.only(right: 30),
+        value: todo.completed,
+        onChanged: (value) {
+          context
+              .read<TodosBloc>()
+              .add(TodoCompletedToggled(completed: value ?? false, todo: todo));
+        },
+        secondary: Container(
+          alignment: Alignment.center,
+          height: 40.0,
+          width: 20.0,
+          child: Text(
+            position.toString(),
+            style: const TextStyle(fontSize: 18.0),
+          ),
+        ),
+        title: Text(todo.task),
+        subtitle: Text(todo.description),
       ),
-      title: Text(todo.task),
-      subtitle: Text(todo.description),
+    );
+  }
+}
+
+class _PopUp extends StatelessWidget {
+  const _PopUp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const AlertDialog(
+      actions: [TextField()],
     );
   }
 }
