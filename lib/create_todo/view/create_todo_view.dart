@@ -110,6 +110,7 @@ class _CreateTodoTitle extends StatelessWidget {
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
             ),
             TextField(
+              autocorrect: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(gapPadding: 4.0),
                 hintText: 'Tender la cama',
@@ -144,6 +145,7 @@ class _CreateTodoDescription extends StatelessWidget {
           SizedBox(
             width: 400,
             child: TextField(
+              autocorrect: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(gapPadding: 4.0),
                 hintText: 'La de dos plazas',
@@ -169,30 +171,28 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //select hace que escuche siempre los cambios de status en este caso
-    final status = context.select((CreateTodoBloc bloc) => bloc.state.status);
-    final isLoading = status == CreateTodoStatus.loading;
+    // final status = context.select((CreateTodoBloc bloc) => bloc.state.status);
+    // final isLoading = status == CreateTodoStatus.loading;
     return BlocBuilder<CreateTodoBloc, CreateTodoState>(
-      buildWhen:(previous, current) => current.status == CreateTodoStatus.loading,
       builder: (context, state) {
         return MaterialButton(
           focusColor: Colors.black54,
           child: const Icon(
-            Icons.check_box_outlined,
+            Icons.check,
             color: Colors.white70,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black54,
-          onPressed: () {
-            if ( state.status == CreateTodoStatus.loading) {
-              null;
-            } else {
+          onPressed: 
+           state.status == CreateTodoStatus.loading ? null : (){
               context.read<CreateTodoBloc>().add(const TodoNewSubmit(submit: true));
               context.read<TodosBloc>()
                   .add(AddTodo(todo: context.read<CreateTodoBloc>().state.todo));
             }
-          },
+          
+          
         );
       },
     );
