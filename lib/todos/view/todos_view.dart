@@ -19,22 +19,33 @@ class TodosPage extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.teal[100],
-            title: const Text('Todos App'),
-          ),
-          body: const _TodosList(),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.teal[200],
-            child: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CreateTodoView.route(context),
-              );
-            },
-          ),
+        return BlocConsumer<TodosBloc, TodosState>(
+          listenWhen: (previous, current) => current.status != previous.status,
+          listener: (BuildContext context, TodosState state) {
+            if (state.status == TodosStatus.completed) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.teal[100],
+                title: const Text('Todos App'),
+              ),
+              body: const _TodosList(),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.teal[200],
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CreateTodoView.route(context),
+                  );
+                },
+              ),
+            );
+          },
         );
       }),
     );
@@ -119,10 +130,10 @@ class _TodoListTile extends StatelessWidget {
                     width: 65,
                   ),
                   MaterialButton(
+                    
                     child: Text('Delete'),
                     onPressed: () {
                       context.read<TodosBloc>().add(RemoveTodo(id: todo.id));
-                      
                     },
                   )
                 ],
